@@ -47,19 +47,19 @@ Ask Claude to run the config doctor, audit your Claude configuration, or check y
 ### From GitHub (recommended)
 
 ```bash
-/plugin install github:your-username/config-doctor
+/plugin install github:mpiccinnonode/config-doctor
 ```
 
 Or pin to a specific release:
 
 ```bash
-/plugin install github:your-username/config-doctor@v1.0.0
+/plugin install github:mpiccinnonode/config-doctor@v1.0.0
 ```
 
 ### From a local clone
 
 ```bash
-git clone https://github.com/your-username/config-doctor
+git clone https://github.com/mpiccinnonode/config-doctor
 cc --plugin-dir ./config-doctor
 ```
 
