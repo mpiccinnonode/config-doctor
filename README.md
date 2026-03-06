@@ -60,17 +60,23 @@ brew install uv
 
 ## Installation
 
-**1. Clone the marketplace repo**
-
+**0. Start Claude Code**
 ```bash
-git clone https://github.com/mpiccinnonode/config-doctor \
-  ~/.claude/plugins/marketplaces/mpiccinnonode
+claude
+```
+
+**1. Add the marketplace**
+
+In Claude chat:
+```
+/plugin marketplace add mpiccinnonode/config-doctor
 ```
 
 **2. Install the plugin**
 
+In Claude chat:
 ```
-/plugin install config-doctor@mpiccinnonode
+/plugin install config-doctor
 ```
 
 **3. Restart Claude Code** — the plugin will be active immediately.

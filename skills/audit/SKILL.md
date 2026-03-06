@@ -2,9 +2,22 @@
 name: audit
 description: Deep-scan a project's Claude configuration (.claude/ directory, CLAUDE.md, agents, rules, skills, memory files). Produces a quality report, tooling gap analysis, and memory optimization recommendations — then optionally enforces significant changes.
 version: 1.0.0
+allowed-tools: [Read, Glob, Grep, Write, Edit, Bash, Agent, "mcp__plugin_config-doctor_serena__*"]
 ---
 
 You are orchestrating a multi-phase Claude configuration audit. Work through the phases below in order. Be explicit about what you are doing at each step so the user can follow along and intervene if needed.
+
+---
+
+## Preflight — Serena Availability Check
+
+Run `uv --version` via Bash. If found, proceed silently to Phase 0.
+
+If not found, prompt the user:
+> "Serena MCP is not installed. It reduces token usage by ~60% through semantic code tools. May I install `uv` to enable it?"
+
+- **Approved:** detect OS via `uname -s 2>/dev/null || echo "Windows_NT"`. Run `scripts/install-uv.sh` (Unix/macOS/MINGW) or `scripts/install-uv.ps1` (Windows) via Bash. Verify with `uv --version`, then proceed.
+- **Declined or install failed:** proceed with native tools (`Read`, `Glob`, `Grep`) and note Serena's absence in the Phase 4 summary.
 
 ---
 
@@ -27,42 +40,17 @@ Report a brief inventory table (file path, rough size in lines) before proceedin
 Use the Agent tool to launch the **agent-architect** subagent with the following prompt:
 
 ```
-You are performing a full Claude configuration audit for this project.
+Audit all Claude configuration files for this project. Check both .claude/agents/ and agents/ directories for agent definitions; check both .claude/skills/ and skills/ for skills; check .claude/rules/ for rules files. Read CLAUDE.md and any memory files under .claude/.
 
-Your tasks:
-1. Read CLAUDE.md and all files under .claude/rules/ (recursively).
-2. Read all agent definitions under .claude/agents/ (project-level).
-3. Read all skill definitions under .claude/skills/ (project-level, if any).
-4. Read any memory files under .claude/ (MEMORY.md or memory/ subdirectory).
+Apply your Configuration Quality Rubric to each agent. Flag agents scoring below 35/50.
+Check CLAUDE.md and rules files for duplicate content, contradictions, echo rules, and gaps.
 
-For each agent definition, apply your full Configuration Quality Rubric (Identity & Persona, Instructions Clarity, Operational Completeness, Purposefulness, Project Alignment — 0–10 each). Flag agents scoring below 35/50 for mandatory improvement.
-
-For the rules structure:
-- Check CLAUDE.md is a lean index, not a content dump
-- Verify guardrails.md contains only unique do's and don'ts not echoed elsewhere
-- Identify any rules that contradict each other or overlap significantly
-- Identify rules with no plausible activation scenario (candidates for removal)
-- Flag any rules missing from the structure given the project's tech stack
-
-For skills (if present):
-- Verify each skill has a clear triggering condition
-- Check that skill prompts are self-contained and don't assume ambient context
-
-Output a structured report with:
+Output a structured report:
 ## Agent Audit
-[Per-agent rubric scores + issues]
-
 ## Rules Audit
-[Findings per file — duplicates, contradictions, gaps, verbosity]
-
 ## Skills Audit
-[Findings per skill]
-
 ## Priority Issues (must fix)
-[Ordered list — most critical first]
-
 ## Recommendations (improvements)
-[Ordered list — highest impact first]
 
 Do NOT apply any changes. Report only.
 ```
@@ -115,22 +103,9 @@ Check whether a `memory-optimizer` agent exists in the **project's** `.claude/ag
 
 Prompt to use in either case:
 ```
-Perform a full memory audit of this project's Claude memory files:
-- CLAUDE.md
-- All files under .claude/rules/ (recursively)
-- Any MEMORY.md or memory/ files under .claude/
+Audit the memory files for this project: CLAUDE.md, all files under .claude/rules/ (recursively), and any MEMORY.md or memory/ files under .claude/.
 
-Apply your full Analysis Process (Steps 1–4: inventory, codebase scan, redundancy detection, verbosity analysis).
-
-Output your full Memory Audit Report including:
-- Token Footprint Summary table
-- Priority Findings (highest token savings first)
-- Secondary Optimizations
-- Dormant Rules Review
-- Non-Negotiable sections
-- Optimization Summary with projected token savings %
-
-Do NOT edit any files. Report only.
+Output your full Memory Audit Report. Do NOT edit any files.
 ```
 
 Capture and display the memory audit before proceeding.
@@ -200,6 +175,7 @@ If arguments were passed when invoking this skill (`$ARGUMENTS`), interpret them
 - `--report-only` → Force Phase 5 option A regardless of other input
 - `--apply-safe` → Force Phase 5 option B
 - `--apply-all` → Force Phase 5 option C (will still confirm each significant change)
+- `--skip-agents` → Skip Phase 1
 - `--skip-tooling` → Skip Phase 2
 - `--skip-memory` → Skip Phase 3
 - A path argument (e.g. `/path/to/project`) → Use that path as the project root instead of cwd
