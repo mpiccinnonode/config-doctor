@@ -1,6 +1,6 @@
 {
   "name": "config-doctor",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Deep-scan and audit a project's Claude configuration — agents, rules, skills, memory files — and produce quality reports, tooling gap analysis, and memory optimization recommendations.",
   "author": {
     "name": "mpiccinnonode"
