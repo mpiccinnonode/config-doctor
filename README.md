@@ -81,7 +81,6 @@ In Claude chat:
 
 **3. Restart Claude Code** — the plugin will be active immediately.
 
-> To update later: `git -C ~/.claude/plugins/marketplaces/mpiccinnonode pull`
 
 ## Arguments reference
 
