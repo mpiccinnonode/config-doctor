@@ -17,7 +17,7 @@ Runs a five-phase audit:
 The plugin ships three agents used internally by the audit:
 
 | Agent | Purpose |
-|-------|---------|
+| ------- | --------- |
 | `agent-architect` | Evaluates agent and rules quality using a structured rubric |
 | `code-quality-scouter` | Audits developer tooling and recommends MCP/LSP additions |
 | `memory-optimizer` | Audits memory files for token waste and redundancy |
@@ -28,7 +28,7 @@ The `memory-optimizer` is only used if the project does not already have a custo
 
 ### Via slash command
 
-```
+```text
 /audit
 /audit --report-only
 /audit --apply-safe
@@ -60,32 +60,34 @@ brew install uv
 
 ## Installation
 
-**0. Start Claude Code**
+### 0. Start Claude Code
+
 ```bash
 claude
 ```
 
-**1. Add the marketplace**
+### 1. Add the marketplace
 
 In Claude chat:
-```
+
+```text
 /plugin marketplace add mpiccinnonode/config-doctor
 ```
 
-**2. Install the plugin**
+### 2. Install the plugin
 
 In Claude chat:
-```
+
+```text
 /plugin install config-doctor
 ```
 
 **3. Restart Claude Code** — the plugin will be active immediately.
 
-
 ## Arguments reference
 
 | Flag | Effect |
-|------|--------|
+| ------ | -------- |
 | `--report-only` | Phases 1–4 only; no changes applied |
 | `--apply-safe` | Auto-applies unambiguously safe fixes |
 | `--apply-all` | Applies all recommendations (confirms each significant change) |

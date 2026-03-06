@@ -39,7 +39,7 @@ Report a brief inventory table (file path, rough size in lines) before proceedin
 
 Use the Agent tool to launch the **agent-architect** subagent with the following prompt:
 
-```
+```text
 Audit all Claude configuration files for this project. Check both .claude/agents/ and agents/ directories for agent definitions; check both .claude/skills/ and skills/ for skills; check .claude/rules/ for rules files. Read CLAUDE.md and any memory files under .claude/.
 
 Apply your Configuration Quality Rubric to each agent. Flag agents scoring below 35/50.
@@ -63,7 +63,7 @@ Capture and display the full report from agent-architect before proceeding.
 
 Use the Agent tool to launch the **code-quality-scouter** subagent with the following prompt:
 
-```
+```text
 Audit this project's developer tooling and Claude Code integrations.
 
 Focus on:
@@ -102,7 +102,8 @@ Check whether a `memory-optimizer` agent exists in the **project's** `.claude/ag
 **If no project-level memory-optimizer is found:** use the **bundled `memory-optimizer`** agent that ships with this plugin. Launch it via the Agent tool with the same prompt below.
 
 Prompt to use in either case:
-```
+
+```text
 Audit the memory files for this project: CLAUDE.md, all files under .claude/rules/ (recursively), and any MEMORY.md or memory/ files under .claude/.
 
 Output your full Memory Audit Report. Do NOT edit any files.
@@ -116,7 +117,7 @@ Capture and display the memory audit before proceeding.
 
 Synthesize all three reports into a single **Config Doctor Summary**:
 
-```
+```text
 ## Config Doctor Summary
 
 ### Critical Issues (must fix now)
@@ -144,10 +145,11 @@ Present the user with three options:
 **A) Report only** — Done. No changes applied. User can act on findings manually.
 
 **B) Apply safe changes automatically** — Apply only changes that are unambiguously correct:
-   - Remove exact-duplicate content across rule files
-   - Fix broken markdown formatting in agent files
-   - Remove obviously dead rules (no activation path exists)
-   - Add missing sections to agent files that score 0 on a rubric dimension
+
+- Remove exact-duplicate content across rule files
+- Fix broken markdown formatting in agent files
+- Remove obviously dead rules (no activation path exists)
+- Add missing sections to agent files that score 0 on a rubric dimension
 
 **C) Apply all recommendations** — Apply all findings including structural changes, agent rewrites, and rule file reorganization. Requires explicit user confirmation before each significant change.
 

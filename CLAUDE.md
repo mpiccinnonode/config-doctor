@@ -4,7 +4,7 @@ config-doctor is a Claude Code plugin. No build step or test suite — content i
 
 ## Repository structure
 
-```
+```text
 .claude-plugin/
   plugin.json        # Plugin metadata (name, version, author, repo)
   marketplace.json   # Marketplace registry entry for distribution
@@ -43,4 +43,3 @@ Agents fall back to `Read`, `Glob`, and `Grep` if Serena is unavailable.
 - **`$ARGUMENTS`**: the skill receives user flags (`--report-only`, `--apply-safe`, `--apply-all`, `--skip-tooling`, `--skip-memory`, `--skip-agents`, or a path) via the `$ARGUMENTS` placeholder at the end of `SKILL.md`.
 - **Version sync**: `plugin.json` and `SKILL.md` both declare a `version` field. Keep them in sync — `plugin.json` is the source of truth.
 - **Scripts**: only small, focused shell scripts in `scripts/` are permitted — for platform-specific install tasks that cannot be expressed in markdown. Do not introduce package managers, build tools, or compiled assets.
-

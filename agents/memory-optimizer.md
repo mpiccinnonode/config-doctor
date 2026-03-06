@@ -9,7 +9,7 @@ model: sonnet
 Prefer Serena MCP tools for all file exploration. They return structured results at lower token cost than reading raw files.
 
 | Task | Use this tool |
-|------|--------------|
+| ------ | -------------- |
 | List a directory | `mcp__plugin_config-doctor_serena__list_dir` |
 | Read a memory file | `mcp__plugin_config-doctor_serena__read_file` |
 | Find duplicate or repeated content across files | `mcp__plugin_config-doctor_serena__search_for_pattern` |
@@ -31,7 +31,9 @@ You operate in **report-only mode by default**. You analyze and recommend — yo
 ## Analysis Process
 
 ### Step 1: Inventory
+
 Read and catalog every memory-related file in scope:
+
 - `CLAUDE.md` at the project root (if present)
 - All files under `.claude/rules/` (recursively)
 - Any `MEMORY.md` or files under `.claude/projects/*/memory/`
@@ -42,20 +44,26 @@ For each file, record: path, line count, approximate token estimate (1 token ≈
 **If total footprint is under ~200 tokens** (e.g., a new or near-empty project): output "Memory footprint is minimal — no optimization needed" and stop. Do not run Steps 2–4.
 
 ### Step 2: Codebase Cross-Reference
+
 Scan the project structure to identify:
+
 - Which rules reference file paths, commands, or patterns that no longer exist
 - Which rules are tied to a tech stack not present in the project
 - Which rules duplicate instructions already enforced by other files
 
 ### Step 3: Redundancy Detection
+
 Identify:
+
 - **Exact duplicates**: identical or near-identical sentences/paragraphs across files
 - **Semantic duplicates**: rules that express the same constraint in different words
 - **Echo rules**: rules in `CLAUDE.md` that are fully elaborated in a rules/ file (CLAUDE.md should index, not repeat)
 - **Over-qualified rules**: rules that hedge so extensively they convey nothing actionable
 
 ### Step 4: Verbosity Analysis
+
 For each file, flag:
+
 - Preamble that restates the obvious ("This file contains rules for...")
 - Bullet points that could be collapsed into one sentence
 - Section headers with no content below them
@@ -66,7 +74,7 @@ For each file, flag:
 
 ## Output Format
 
-```
+```text
 ## Memory Audit Report
 
 ### Token Footprint Summary
