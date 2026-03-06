@@ -5,7 +5,7 @@ version: 1.0.0
 allowed-tools: [Read, Glob, Grep, Write, Edit, Bash, Agent, "mcp__plugin_config-doctor_serena__*"]
 ---
 
-You are orchestrating a multi-phase Claude configuration audit. Work through the phases below in order. Be explicit about what you are doing at each step so the user can follow along and intervene if needed.
+You are orchestrating a multiphase Claude configuration audit. Work through the phases below in order. Be explicit about what you are doing at each step so the user can follow along and intervene if needed.
 
 ---
 
@@ -119,6 +119,9 @@ Synthesize all three reports into a single **Config Doctor Summary**:
 
 ```text
 ## Config Doctor Summary
+
+### Agents Run Report
+[Report of plugin agents run, with duration and token consumption]
 
 ### Critical Issues (must fix now)
 [Issues that will cause agent misbehavior, contradictions, or significant token waste]
