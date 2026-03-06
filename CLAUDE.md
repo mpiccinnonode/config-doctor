@@ -14,9 +14,6 @@ agents/              # Bundled subagents — deployed to the user's .claude/agen
   code-quality-scouter.md # Audits developer tooling and recommends MCP/LSP additions (sonnet)
   memory-optimizer.md     # Audits memory files for token waste and redundancy (sonnet)
 
-commands/
-  audit.md           # Slash command definition — thin wrapper that delegates to the skill
-
 skills/audit/
   SKILL.md           # The full multi-phase audit orchestration logic (5 phases)
 
@@ -38,8 +35,7 @@ Agents fall back to `Read`, `Glob`, and `Grep` if Serena is unavailable.
 ## Key conventions when editing this plugin
 
 - **Agent frontmatter**: each agent file requires `name:`, `description:` (with `<example>` blocks), and `model:` fields. `agent-architect` runs on `opus`; others run on `sonnet`.
-- **Skill frontmatter**: `skills/audit/SKILL.md` requires `name:`, `description:`, `version:`, and `allowed-tools:` (currently includes `mcp__plugin_config-doctor_serena__*` wildcard).
-- **Command frontmatter**: `commands/audit.md` uses `description:` and `argument-hint:` for slash command registration. It is intentionally thin — all logic lives in the skill.
+- **Skill frontmatter**: `skills/audit/SKILL.md` requires `name:`, `description:`, and `allowed-tools:` (currently includes `mcp__plugin_config-doctor_serena__*` wildcard). The `argument-hint:` field controls slash command autocomplete.
 - **`$ARGUMENTS`**: the skill receives user flags (`--report-only`, `--apply-safe`, `--apply-all`, `--skip-tooling`, `--skip-memory`, `--skip-agents`, or a path) via the `$ARGUMENTS` placeholder at the end of `SKILL.md`.
 - **Version sync**: `plugin.json` and `SKILL.md` both declare a `version` field. Keep them in sync — `plugin.json` is the source of truth.
 - **Scripts**: only small, focused shell scripts in `scripts/` are permitted — for platform-specific install tasks that cannot be expressed in markdown. Do not introduce package managers, build tools, or compiled assets.
