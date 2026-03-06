@@ -29,39 +29,53 @@ The `memory-optimizer` is only used if the project does not already have a custo
 ### Via slash command
 
 ```
-/config-doctor
-/config-doctor --report-only
-/config-doctor --apply-safe
-/config-doctor --apply-all
-/config-doctor --skip-tooling
-/config-doctor --skip-memory
-/config-doctor /path/to/other/project
+/audit
+/audit --report-only
+/audit --apply-safe
+/audit --apply-all
+/audit --skip-tooling
+/audit --skip-memory
+/audit /path/to/other/project
 ```
 
 ### Via natural language (skill auto-trigger)
 
 Ask Claude to run the config doctor, audit your Claude configuration, or check your `.claude/` setup.
 
+## Prerequisites
+
+config-doctor bundles [Serena](https://github.com/oraios/serena) as an MCP server for file exploration. Serena is launched via `uvx`, which requires the `uv` Python package manager.
+
+Install `uv` if you don't have it:
+
+```bash
+curl -LsSf https://astral.sh/uv/install.sh | sh
+```
+
+Or via Homebrew:
+
+```bash
+brew install uv
+```
+
 ## Installation
 
-### From GitHub (recommended)
+**1. Clone the marketplace repo**
 
 ```bash
-/plugin install github:mpiccinnonode/config-doctor
+git clone https://github.com/mpiccinnonode/config-doctor \
+  ~/.claude/plugins/marketplaces/mpiccinnonode
 ```
 
-Or pin to a specific release:
+**2. Install the plugin**
 
-```bash
-/plugin install github:mpiccinnonode/config-doctor@v1.0.0
+```
+/plugin install config-doctor@mpiccinnonode
 ```
 
-### From a local clone
+**3. Restart Claude Code** — the plugin will be active immediately.
 
-```bash
-git clone https://github.com/mpiccinnonode/config-doctor
-cc --plugin-dir ./config-doctor
-```
+> To update later: `git -C ~/.claude/plugins/marketplaces/mpiccinnonode pull`
 
 ## Arguments reference
 

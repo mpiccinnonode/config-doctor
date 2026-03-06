@@ -4,6 +4,6 @@ argument-hint: [--report-only | --apply-safe | --apply-all] [--skip-tooling] [--
 allowed-tools: [Read, Glob, Grep, Write, Edit, Bash, Agent, "mcp__plugin_config-doctor_serena__*"]
 ---
 
-Run the config-doctor skill.
+Run the audit skill.
 
 $ARGUMENTS

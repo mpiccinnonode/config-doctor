@@ -1,0 +1,18 @@
+{
+  "name": "mpiccinnonode",
+  "owner": {
+    "name": "mpiccinnonode"
+  },
+  "metadata": {
+    "description": "Claude Code plugins by mpiccinnonode",
+    "homepage": "https://github.com/mpiccinnonode/config-doctor"
+  },
+  "plugins": [
+    {
+      "name": "config-doctor",
+      "version": "1.0.0",
+      "source": ".",
+      "description": "Deep-scan and audit a project's Claude configuration — agents, rules, skills, memory files — and produce quality reports, tooling gap analysis, and memory optimization recommendations."
+    }
+  ]
+}

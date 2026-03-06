@@ -3,6 +3,16 @@
   "version": "1.0.0",
   "description": "Deep-scan and audit a project's Claude configuration — agents, rules, skills, memory files — and produce quality reports, tooling gap analysis, and memory optimization recommendations.",
   "author": {
-    "name": "mpiccinno"
-  }
+    "name": "mpiccinnonode"
+  },
+  "repository": "https://github.com/mpiccinnonode/config-doctor",
+  "license": "MIT",
+  "keywords": [
+    "audit",
+    "config",
+    "agents",
+    "rules",
+    "memory",
+    "tooling"
+  ]
 }
