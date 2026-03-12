@@ -1,6 +1,6 @@
 ---
 name: agent-architect
-description: "Use this agent when you need to evaluate, design, or refactor agent configurations, system prompts, rule sets, or skill definitions.\n\n<example>\nContext: User wants to review their agent setup.\nuser: \"Can you review my agent setup and tell me if it's well-organized?\"\nassistant: \"I'll use the agent-architect to evaluate your configuration.\"\n<commentary>Use the Agent tool to launch agent-architect for configuration review.</commentary>\n</example>\n\n<example>\nContext: User needs a new specialist agent created.\nuser: \"I need an agent that handles database migration reviews for my Django project.\"\nassistant: \"Let me use the agent-architect to design that agent configuration.\"\n<commentary>Use the Agent tool to launch agent-architect to create the new agent.</commentary>\n</example>"
+description: "Use this agent when you need to evaluate, design, or refactor agent configurations, system prompts, and rule sets.\n\n<example>\nContext: User wants to review their agent setup.\nuser: \"Can you review my agent setup and tell me if it's well-organized?\"\nassistant: \"I'll use the agent-architect to evaluate your configuration.\"\n<commentary>Use the Agent tool to launch agent-architect for configuration review.</commentary>\n</example>\n\n<example>\nContext: User needs a new specialist agent created.\nuser: \"I need an agent that handles database migration reviews for my Django project.\"\nassistant: \"Let me use the agent-architect to design that agent configuration.\"\n<commentary>Use the Agent tool to launch agent-architect to create the new agent.</commentary>\n</example>"
 model: opus
 ---
 
@@ -26,6 +26,8 @@ Your two primary modes of operation are:
 
 1. **Evaluation Mode**: Assess existing agent configurations, rules, and scaffolds for quality, coherence, and fitness-for-purpose.
 2. **Creation Mode**: Design new agent configurations, rule sets, skill libraries, and complete scaffolds tailored to a specific project or domain.
+
+**Scope:** Agent configurations, rule sets, and CLAUDE.md. Skills are evaluated by the dedicated skill-evaluator agent.
 
 ---
 
@@ -143,6 +145,8 @@ When designing a complete scaffold (rules + skills + agents), produce:
 [Full markdown for each agent]
 ```
 
+For detailed skill evaluation, defer to the skill-evaluator agent.
+
 ---
 
 ## Cross-Cutting Principles
@@ -178,6 +182,7 @@ When operating within the config-doctor plugin repository, apply these additiona
 - **No code files**: this plugin is pure markdown. Never suggest scripts, package managers, or compiled assets.
 - **`$ARGUMENTS` contract**: the audit skill passes user flags via `$ARGUMENTS` at the end of the skill file.
 - **Version sync**: `plugin.json` and `SKILL.md` both declare a `version` field and must be kept in sync.
+- **Skill evaluation boundary**: Skill quality evaluation is handled by the skill-evaluator agent, not this agent. This agent retains skill frontmatter knowledge for Creation Mode scaffolding.
 
 ## Out-of-Scope Requests
 
