@@ -2,7 +2,7 @@
 name: audit
 version: "1.0.1"
 description: Deep-scan a project's Claude configuration (.claude/ directory, CLAUDE.md, agents, rules, skills, memory files). Produces a quality report, tooling gap analysis, and memory optimization recommendations — then optionally enforces significant changes.
-argument-hint: "[--report-only | --apply-safe | --apply-all] [--skip-agents] [--skip-tooling] [--skip-memory] [/path/to/project]"
+argument-hint: "[--report-only | --apply-safe | --apply-all] [--skip-agents] [--skip-skills] [--skip-tooling] [--skip-memory] [/path/to/project]"
 allowed-tools: [Read, Glob, Grep, Write, Edit, Bash, Agent, "mcp__plugin_config-doctor_serena__*"]
 ---
 
@@ -18,7 +18,7 @@ If not found, prompt the user:
 > "Serena MCP is not installed. It reduces token usage by ~60% through semantic code tools. May I install `uv` to enable it?"
 
 - **Approved:** detect OS via `uname -s 2>/dev/null || echo "Windows_NT"`. Run `scripts/install-uv.sh` (Unix/macOS/MINGW) or `scripts/install-uv.ps1` (Windows) via Bash. Verify with `uv --version`, then proceed.
-- **Declined or install failed:** proceed with native tools (`Read`, `Glob`, `Grep`) and note Serena's absence in the Phase 4 summary.
+- **Declined or install failed:** proceed with native tools (`Read`, `Glob`, `Grep`) and note Serena's absence in the Phase 5 summary.
 
 ---
 
@@ -36,12 +36,12 @@ Report a brief inventory table (file path, rough size in lines) before proceedin
 
 ---
 
-## Phase 1 — Agent & Configuration Quality Audit (agent-architect)
+## Phase 1 — Agent & Rules Quality Audit (agent-architect)
 
 Use the Agent tool to launch the **agent-architect** subagent with the following prompt:
 
 ```text
-Audit all Claude configuration files for this project. Check both .claude/agents/ and agents/ directories for agent definitions; check both .claude/skills/ and skills/ for skills; check .claude/rules/ for rules files. Read CLAUDE.md and any memory files under .claude/.
+Audit all Claude configuration files for this project. Check both .claude/agents/ and agents/ directories for agent definitions; check .claude/rules/ for rules files. Skills are evaluated separately by the skill-evaluator agent. Read CLAUDE.md and any memory files under .claude/.
 
 Apply your Configuration Quality Rubric to each agent. Flag agents scoring below 35/50.
 Check CLAUDE.md and rules files for duplicate content, contradictions, echo rules, and gaps.
@@ -49,7 +49,6 @@ Check CLAUDE.md and rules files for duplicate content, contradictions, echo rule
 Output a structured report:
 ## Agent Audit
 ## Rules Audit
-## Skills Audit
 ## Priority Issues (must fix)
 ## Recommendations (improvements)
 
@@ -60,7 +59,30 @@ Capture and display the full report from agent-architect before proceeding.
 
 ---
 
-## Phase 2 — Tooling Gap Analysis (code-quality-scouter)
+## Phase 2 — Skills Quality Audit (skill-evaluator)
+
+Use the Agent tool to launch the **skill-evaluator** subagent with the following prompt:
+
+```text
+Audit all skill files for this project. Check both .claude/skills/ and skills/
+directories (recursively) for skill definitions.
+
+Apply your Skills Quality Rubric to each skill. Flag skills scoring below 35/50.
+
+Output a structured report:
+## Skills Inventory
+## Per-Skill Evaluation (table: Dimension / Score / Notes)
+## Priority Issues (must fix)
+## Recommendations (improvements)
+
+Do NOT apply any changes. Report only.
+```
+
+Capture and display the full skills report before proceeding.
+
+---
+
+## Phase 3 — Tooling Gap Analysis (code-quality-scouter)
 
 Use the Agent tool to launch the **code-quality-scouter** subagent with the following prompt:
 
@@ -94,7 +116,7 @@ Capture and display the full tooling report before proceeding.
 
 ---
 
-## Phase 3 — Memory Optimization
+## Phase 4 — Memory Optimization
 
 Check whether a `memory-optimizer` agent exists in the **project's** `.claude/agents/` directory.
 
@@ -114,9 +136,9 @@ Capture and display the memory audit before proceeding.
 
 ---
 
-## Phase 4 — Consolidated Findings
+## Phase 5 — Consolidated Findings
 
-Synthesize all three reports into a single **Config Doctor Summary**:
+Synthesize all four reports into a single **Config Doctor Summary**:
 
 ```text
 ## Config Doctor Summary
@@ -125,16 +147,16 @@ Synthesize all three reports into a single **Config Doctor Summary**:
 [Report of plugin agents run, with duration and token consumption]
 
 ### Critical Issues (must fix now)
-[Issues that will cause agent misbehavior, contradictions, or significant token waste]
+[Issues that will cause agent misbehavior, contradictions, or significant token waste. Include skills scoring below 25/50.]
 
 ### High-Priority Improvements
-[Impactful changes that are low-risk]
+[Impactful changes that are low-risk. Include skills scoring 25-34/50.]
 
 ### Tooling Gaps
 [Top 3 tooling additions by impact]
 
 ### Memory Savings
-[Projected token reduction if memory optimizations are applied]
+[Projected token reduction if memory optimizations are applied. Include token savings from skill prompt compression.]
 
 ### Risk Assessment
 [Changes that require care — could affect agent behavior in ways that need verification]
@@ -142,7 +164,7 @@ Synthesize all three reports into a single **Config Doctor Summary**:
 
 ---
 
-## Phase 5 — Enforcement Decision
+## Phase 6 — Enforcement Decision
 
 Present the user with three options:
 
@@ -154,8 +176,11 @@ Present the user with three options:
 - Fix broken markdown formatting in agent files
 - Remove obviously dead rules (no activation path exists)
 - Add missing sections to agent files that score 0 on a rubric dimension
+- Fix frontmatter issues in skill files (missing fields, description format, naming violations)
 
 **C) Apply all recommendations** — Apply all findings including structural changes, agent rewrites, and rule file reorganization. Requires explicit user confirmation before each significant change.
+
+- Rewrite skills scoring below 35/50 using skill-evaluator's suggested revisions
 
 Ask the user which option they want before proceeding. Default to A if no response.
 
@@ -178,12 +203,13 @@ When applying changes:
 
 If arguments were passed when invoking this skill (`$ARGUMENTS`), interpret them as follows:
 
-- `--report-only` → Force Phase 5 option A regardless of other input
-- `--apply-safe` → Force Phase 5 option B
-- `--apply-all` → Force Phase 5 option C (will still confirm each significant change)
+- `--report-only` → Force Phase 6 option A regardless of other input
+- `--apply-safe` → Force Phase 6 option B
+- `--apply-all` → Force Phase 6 option C (will still confirm each significant change)
 - `--skip-agents` → Skip Phase 1
-- `--skip-tooling` → Skip Phase 2
-- `--skip-memory` → Skip Phase 3
+- `--skip-skills` → Skip Phase 2
+- `--skip-tooling` → Skip Phase 3
+- `--skip-memory` → Skip Phase 4
 - A path argument (e.g. `/path/to/project`) → Use that path as the project root instead of cwd
 
 $ARGUMENTS
