@@ -36,7 +36,7 @@ Agents fall back to `Read`, `Glob`, and `Grep` if Serena is unavailable.
 ## Key conventions when editing this plugin
 
 - **Agent frontmatter**: each agent file requires `name:`, `description:` (with `<example>` blocks), and `model:` fields. `agent-architect` runs on `opus`; others run on `sonnet`.
-- **Skill frontmatter**: `skills/audit/SKILL.md` requires `name:`, `description:`, and `allowed-tools:` (currently includes `mcp__plugin_config-doctor_serena__*` wildcard). The `argument-hint:` field controls slash command autocomplete.
+- **Skill frontmatter**: `skills/audit/SKILL.md` requires `name:`, `description:`, `version:`, and `allowed-tools:` (currently includes `mcp__plugin_config-doctor_serena__*` wildcard). The `argument-hint:` field controls slash command autocomplete.
 - **`$ARGUMENTS`**: the skill receives user flags (`--report-only`, `--apply-safe`, `--apply-all`, `--skip-agents`, `--skip-skills`, `--skip-tooling`, `--skip-memory`, or a path) via the `$ARGUMENTS` placeholder at the end of `SKILL.md`.
 - **Version sync**: `plugin.json` and `SKILL.md` both declare a `version` field. Keep them in sync — `plugin.json` is the source of truth.
 - **Scripts**: only small, focused shell scripts in `scripts/` are permitted — for platform-specific install tasks that cannot be expressed in markdown. Do not introduce package managers, build tools, or compiled assets.
