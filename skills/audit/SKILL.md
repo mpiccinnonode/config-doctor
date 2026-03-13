@@ -179,7 +179,7 @@ Capture and display the memory audit before proceeding.
 
 ## Phase 5 — Consolidated Findings
 
-Synthesize all four reports into a single **Config Doctor Summary**:
+Synthesize all phase reports into a single **Config Doctor Summary**:
 
 ```text
 ## Config Doctor Summary
@@ -198,6 +198,9 @@ Synthesize all four reports into a single **Config Doctor Summary**:
 
 ### Memory Savings
 [Projected token reduction if memory optimizations are applied. Include token savings from skill prompt compression.]
+
+### Script Offloading Opportunities
+[Top opportunities from the scouter's analysis, ordered by estimated token savings. For each: skill name, opportunity description, category, estimated savings, effort level.]
 
 ### Risk Assessment
 [Changes that require care — could affect agent behavior in ways that need verification]
