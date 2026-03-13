@@ -12,10 +12,10 @@ You are orchestrating a multiphase Claude configuration audit. Work through the 
 
 ## Preflight — Serena Availability Suggestion
 
-Check whether Serena MCP tools are available to the current session (look for any tool matching `mcp__serena__*` or `mcp__plugin_*_serena__*`).
+Check whether Serena MCP tools are available in this session by looking for tools matching `mcp__serena__*` or `mcp__plugin_*_serena__*`.
 
-- **If available:** note this in Phase 0 output. Subagents will automatically prefer Serena tools for lower token usage.
-- **If not available:** proceed with native tools (`Read`, `Glob`, `Grep`). Include a brief note in the Phase 5 summary: "Consider adding [Serena](https://github.com/oraios/serena) as an MCP server — it can reduce token usage during code exploration through semantic tools like `get_symbols_overview` and `search_for_pattern`."
+- **If found:** note "Serena MCP detected — agents will use structured semantic tools for lower token cost" and proceed to Phase 0.
+- **If not found:** proceed with native tools (`Read`, `Glob`, `Grep`). In the Phase 5 summary, include a suggestion: "Consider adding [Serena MCP](https://github.com/oraios/serena) for ~60% token savings through semantic code tools."
 
 ---
 
@@ -259,7 +259,7 @@ If arguments were passed when invoking this skill (`$ARGUMENTS`), interpret them
 **Phase name mapping:**
 
 | Phase name | Phase |
-|---|---|
+| --- | --- |
 | `agents` | Phase 1 — Agent & Rules Quality Audit |
 | `skills` | Phase 2 — Skills Quality & Efficiency Audit |
 | `tooling` | Phase 3 — Tooling Gap Analysis |

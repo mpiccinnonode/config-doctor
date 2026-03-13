@@ -24,7 +24,7 @@ skills/audit/
 
 ## Optional MCP enhancement: Serena
 
-Subagents use native tools (`Read`, `Glob`, `Grep`) by default. If the user has [Serena](https://github.com/oraios/serena) configured as an MCP server, agents will prefer its tools (`get_symbols_overview`, `search_for_pattern`, etc.) for lower token usage. The plugin does not bundle or install Serena — it detects the user's existing configuration.
+Subagents use native Claude Code tools (`Read`, `Glob`, `Grep`) by default. If the user has [Serena](https://github.com/oraios/serena) configured in their environment (detected as `mcp__serena__*` or `mcp__plugin_*_serena__*`), agents will prefer its structured semantic tools for lower token cost. No bundled MCP server — Serena is detected from the user's own configuration.
 
 ## Key conventions when editing this plugin
 
