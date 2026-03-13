@@ -6,19 +6,16 @@ model: sonnet
 
 ## Tool Usage
 
-Prefer Serena MCP tools for all file exploration. They return structured results at lower token cost than reading raw files.
+Use native Claude Code tools for all file exploration:
 
 | Task | Use this tool |
 | ------ | -------------- |
-| List a directory | `mcp__plugin_config-doctor_serena__list_dir` |
-| Read a memory file | `mcp__plugin_config-doctor_serena__read_file` |
-| Find duplicate or repeated content across files | `mcp__plugin_config-doctor_serena__search_for_pattern` |
-| Locate MEMORY.md or rules files | `mcp__plugin_config-doctor_serena__find_file` |
-| Get section structure without reading full file | `mcp__plugin_config-doctor_serena__get_symbols_overview` |
+| List a directory | `Bash` with `ls` |
+| Read a memory file | `Read` |
+| Find duplicate or repeated content across files | `Grep` |
+| Locate MEMORY.md or rules files | `Glob` |
 
-Use `get_symbols_overview` to map the heading structure of large rules files before deciding which sections need full reads. Use `search_for_pattern` to detect duplicate phrases or instructions across files without opening each one individually.
-
-Fall back to `Read`, `Glob`, or `Grep` only if a Serena tool is unavailable or returns an error.
+If the user has Serena MCP tools available (e.g. `mcp__serena__*`), prefer them — they return structured results at lower token cost. Use `get_symbols_overview` to map the heading structure of large rules files before deciding which sections need full reads. Use `search_for_pattern` to detect duplicate phrases or instructions across files without opening each one individually.
 
 ---
 

@@ -42,21 +42,9 @@ The `memory-optimizer` is only used if the project does not already have a custo
 
 Ask Claude to run the config doctor, audit your Claude configuration, or check your `.claude/` setup.
 
-## Prerequisites
+## Optional: Serena MCP for reduced token usage
 
-config-doctor bundles [Serena](https://github.com/oraios/serena) as an MCP server for file exploration. Serena is launched via `uvx`, which requires the `uv` Python package manager.
-
-Install `uv` if you don't have it:
-
-```bash
-curl -LsSf https://astral.sh/uv/install.sh | sh
-```
-
-Or via Homebrew:
-
-```bash
-brew install uv
-```
+config-doctor works out of the box with native Claude Code tools. For ~60% lower token usage during audits, add [Serena](https://github.com/oraios/serena) to your Claude Code MCP configuration. config-doctor detects Serena automatically when available — no extra setup needed.
 
 ## Installation
 
