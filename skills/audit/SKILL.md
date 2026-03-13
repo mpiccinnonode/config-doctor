@@ -136,6 +136,8 @@ Focus on:
 3. What pre-commit hooks exist?
 4. What gaps exist given the project's tech stack?
 5. Are there MCP servers or LSP tools that would meaningfully improve Claude Code's performance in this codebase?
+6. What Claude Code hooks are configured in .claude/settings.json? Are they well-structured (appropriate matchers, timeouts, no duplicates)?
+7. What hooks would benefit this project based on its existing toolchain?
 
 Output format:
 ## Current Toolchain
@@ -149,6 +151,12 @@ Output format:
 
 ## Quick Wins
 [Tools that can be added in under 30 minutes with high payoff]
+
+## Claude Code Hooks
+[Hooks inventory and quality assessment]
+
+## Hooks Recommendations
+[Suggested hooks tied to project toolchain]
 
 Do NOT install or configure anything. Report only.
 ```
