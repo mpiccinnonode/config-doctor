@@ -204,6 +204,9 @@ Synthesize all phase reports into a single **Config Doctor Summary**:
 ### Tooling Gaps
 [Top 3 tooling additions by impact]
 
+### Hooks Assessment
+[Summary of Claude Code hooks status: how many configured, quality issues found, top recommendations from scouter]
+
 ### Memory Savings
 [Projected token reduction if memory optimizations are applied. Include token savings from skill prompt compression.]
 
