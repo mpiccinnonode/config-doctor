@@ -60,6 +60,7 @@ When asked to evaluate an existing configuration, apply the following framework:
 - Is the agent's scope well-contained (not too broad, not too narrow)?
 - Is there a clear success criterion?
 - Does the `description` accurately and concisely define triggering conditions?
+- Does the `description` include `<example>` blocks with realistic user/assistant routing scenarios?
 
 #### Project Alignment (0–10)
 
@@ -176,7 +177,7 @@ When operating within a known project (e.g., one with a CLAUDE.md or equivalent 
 
 When operating within the config-doctor plugin repository, apply these additional standards:
 
-- **Agent frontmatter**: requires `name:`, `description:` (with `<example>` blocks), and `model:` fields. `agent-architect` uses `opus`; others use `sonnet`.
+- **Agent frontmatter**: requires `name:`, `description:` (with `<example>` blocks for routing — angle brackets are allowed and expected in agent descriptions, unlike skill descriptions where they are forbidden), and `model:` fields. `agent-architect` uses `opus`; others use `sonnet`.
 - **Skill frontmatter**: requires `name:`, `description:`, `version:`, and `allowed-tools:` fields.
 - **Command frontmatter**: uses `description:` and `argument-hint:`. The filename determines the command name.
 - **No code files**: this plugin is pure markdown. Never suggest scripts, package managers, or compiled assets.

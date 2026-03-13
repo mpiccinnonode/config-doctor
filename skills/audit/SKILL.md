@@ -2,7 +2,7 @@
 name: audit
 version: "1.0.1"
 description: Deep-scan a project's Claude configuration (.claude/ directory, CLAUDE.md, agents, rules, skills, memory files). Produces a quality report, tooling gap analysis, and memory optimization recommendations — then optionally enforces significant changes.
-argument-hint: "[--report-only | --apply-safe | --apply-all] [--skip-agents] [--skip-skills] [--skip-tooling] [--skip-memory] [/path/to/project]"
+argument-hint: "[--report-only | --apply-safe | --apply-all] [--phase=agents,skills,...] [--skip-agents] [--skip-skills] [--skip-tooling] [--skip-memory] [/path/to/project]"
 allowed-tools: [Read, Glob, Grep, Write, Edit, Bash, Agent, "mcp__plugin_config-doctor_serena__*"]
 ---
 
@@ -203,13 +203,42 @@ When applying changes:
 
 If arguments were passed when invoking this skill (`$ARGUMENTS`), interpret them as follows:
 
-- `--report-only` → Force Phase 6 option A regardless of other input
-- `--apply-safe` → Force Phase 6 option B
-- `--apply-all` → Force Phase 6 option C (will still confirm each significant change)
+### Phase selection (`--phase`)
+
+- `--phase=<name>` → Run **only** the listed phase(s). Accepts a comma-separated list of phase names.
+- Valid phase names: `agents`, `skills`, `tooling`, `memory`
+- Examples: `--phase=skills`, `--phase=agents,skills`, `--phase=tooling,memory`
+- Preflight and Phase 0 (Orientation) **always run** regardless of phase selection — they are infrastructure.
+- Phase 5 (Consolidated Findings) and Phase 6 (Enforcement Decision) **always run** after the selected phases, adapting their output to cover only the phases that were executed.
+
+**Phase name mapping:**
+
+| Phase name | Phase |
+|---|---|
+| `agents` | Phase 1 — Agent & Rules Quality Audit |
+| `skills` | Phase 2 — Skills Quality Audit |
+| `tooling` | Phase 3 — Tooling Gap Analysis |
+| `memory` | Phase 4 — Memory Optimization |
+
+### Skip flags
+
 - `--skip-agents` → Skip Phase 1
 - `--skip-skills` → Skip Phase 2
 - `--skip-tooling` → Skip Phase 3
 - `--skip-memory` → Skip Phase 4
+
+### Conflict resolution
+
+If both `--phase` and `--skip-*` flags are present, `--phase` takes priority. The `--skip-*` flags are ignored and a note is shown to the user explaining that `--phase` was used instead.
+
+### Enforcement mode
+
+- `--report-only` → Force Phase 6 option A regardless of other input
+- `--apply-safe` → Force Phase 6 option B
+- `--apply-all` → Force Phase 6 option C (will still confirm each significant change)
+
+### Other
+
 - A path argument (e.g. `/path/to/project`) → Use that path as the project root instead of cwd
 
 $ARGUMENTS

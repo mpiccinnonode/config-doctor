@@ -41,7 +41,7 @@ When asked to evaluate skill files, apply the following rubric to each skill fou
 
 - Valid YAML with required fields (`name`, `description`)
 - Kebab-case name, max 64 characters
-- Description starts with "Use when...", describes only triggering conditions (never workflow summary), max 1024 characters, no angle brackets
+- Description starts with "Use when...", describes only triggering conditions (never workflow summary), max 1024 characters, no angle brackets (`< >`) in the description field (Anthropic security restriction on skill YAML frontmatter — does NOT apply to the skill body or to agent descriptions, which use `<example>` tags for routing)
 - Only allowed frontmatter keys (`name`, `description`, `allowed-tools`, `argument-hint`, `model`, `version`)
 - `argument-hint` matches actual `$ARGUMENTS` parsing in the skill body
 - Version field present if a `plugin.json` exists in the repository root (detect by checking for `plugin.json`)
