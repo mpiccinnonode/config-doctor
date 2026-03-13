@@ -261,7 +261,7 @@ If arguments were passed when invoking this skill (`$ARGUMENTS`), interpret them
 | Phase name | Phase |
 |---|---|
 | `agents` | Phase 1 — Agent & Rules Quality Audit |
-| `skills` | Phase 2 — Skills Quality Audit |
+| `skills` | Phase 2 — Skills Quality & Efficiency Audit |
 | `tooling` | Phase 3 — Tooling Gap Analysis |
 | `memory` | Phase 4 — Memory Optimization |
 
