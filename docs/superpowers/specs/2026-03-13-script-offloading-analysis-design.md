@@ -102,8 +102,8 @@ The scouter dispatch is tied to the `skills` phase name. If `--skip-skills` is a
 
 | File | Change |
 |---|---|
-| `skills/audit/SKILL.md` | Phase 2: add parallel scouter dispatch. Phase 5: add Script Offloading Opportunities section. Phase 6 option C: add note about script recommendations. |
-| `CLAUDE.md` | Update audit skill description to mention dual Phase 2 dispatch. |
+| `skills/audit/SKILL.md` | **Phase 2 heading**: rename to "Phase 2 — Skills Quality & Efficiency Audit (skill-evaluator + code-quality-scouter)". **Phase 2 body**: add parallel scouter dispatch as a second Agent tool call. **Phase 2 closing**: replace "Capture and display the full skills report before proceeding." with "Capture and display both reports (skill-evaluator and scouter) before proceeding." **Phase 5 preamble**: change "all four reports" to "all phase reports". **Phase 5 template**: add "Script Offloading Opportunities" section after "Memory Savings". **Phase 6 option C**: add note that script-offloading recommendations are presented for acknowledgment but not auto-implemented. |
+| `CLAUDE.md` | Update the `skills/audit/SKILL.md` line in the repository structure comment to read: `SKILL.md  # The full multi-phase audit orchestration logic (7 phases, dual Phase 2 dispatch)`. |
 
 ### Files NOT modified
 
