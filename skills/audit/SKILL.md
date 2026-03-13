@@ -225,6 +225,7 @@ Present the user with three options:
 **C) Apply all recommendations** — Apply all findings including structural changes, agent rewrites, and rule file reorganization. Requires explicit user confirmation before each significant change.
 
 - Rewrite skills scoring below 35/50 using skill-evaluator's suggested revisions
+- Present script-offloading recommendations for acknowledgment (not auto-implemented — writing scripts is outside audit enforcement scope)
 
 Ask the user which option they want before proceeding. Default to A if no response.
 
