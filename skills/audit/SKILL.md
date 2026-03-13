@@ -3,22 +3,19 @@ name: audit
 version: "1.0.1"
 description: Deep-scan a project's Claude configuration (.claude/ directory, CLAUDE.md, agents, rules, skills, memory files). Produces a quality report, tooling gap analysis, and memory optimization recommendations — then optionally enforces significant changes.
 argument-hint: "[--report-only | --apply-safe | --apply-all] [--phase=agents,skills,...] [--skip-agents] [--skip-skills] [--skip-tooling] [--skip-memory] [/path/to/project]"
-allowed-tools: [Read, Glob, Grep, Write, Edit, Bash, Agent, "mcp__plugin_config-doctor_serena__*"]
+allowed-tools: [Read, Glob, Grep, Write, Edit, Bash, Agent]
 ---
 
 You are orchestrating a multiphase Claude configuration audit. Work through the phases below in order. Be explicit about what you are doing at each step so the user can follow along and intervene if needed.
 
 ---
 
-## Preflight — Serena Availability Check
+## Preflight — Serena Availability Suggestion
 
-Run `uv --version` via Bash. If found, proceed silently to Phase 0.
+Check whether Serena MCP tools are available in this session by looking for tools matching `mcp__serena__*` or `mcp__plugin_*_serena__*`.
 
-If not found, prompt the user:
-> "Serena MCP is not installed. It reduces token usage by ~60% through semantic code tools. May I install `uv` to enable it?"
-
-- **Approved:** detect OS via `uname -s 2>/dev/null || echo "Windows_NT"`. Run `scripts/install-uv.sh` (Unix/macOS/MINGW) or `scripts/install-uv.ps1` (Windows) via Bash. Verify with `uv --version`, then proceed.
-- **Declined or install failed:** proceed with native tools (`Read`, `Glob`, `Grep`) and note Serena's absence in the Phase 5 summary.
+- **If found:** note "Serena MCP detected — agents will use structured semantic tools for lower token cost" and proceed to Phase 0.
+- **If not found:** proceed with native tools (`Read`, `Glob`, `Grep`). In the Phase 5 summary, include a suggestion: "Consider adding Serena MCP (https://github.com/oraios/serena) for ~60% token savings through semantic code tools."
 
 ---
 

@@ -6,17 +6,16 @@ model: sonnet
 
 ## Tool Usage
 
-Prefer Serena MCP tools for all file exploration. They return structured results at lower token cost than reading raw files.
+Use native Claude Code tools for all file exploration:
 
 | Task | Use this tool |
 | ------ | -------------- |
-| List a directory | `mcp__plugin_config-doctor_serena__list_dir` |
-| Read a file | `mcp__plugin_config-doctor_serena__read_file` |
-| Search content across files | `mcp__plugin_config-doctor_serena__search_for_pattern` |
-| Find a file by name | `mcp__plugin_config-doctor_serena__find_file` |
-| Get file structure without full read | `mcp__plugin_config-doctor_serena__get_symbols_overview` |
+| List a directory | `Bash` with `ls` |
+| Read a file | `Read` |
+| Search content across files | `Grep` |
+| Find a file by name | `Glob` |
 
-Fall back to `Read`, `Glob`, or `Grep` only if a Serena tool is unavailable or returns an error.
+If the user has Serena MCP tools available (e.g. `mcp__serena__*`), prefer them — they return structured results at lower token cost.
 
 ---
 
