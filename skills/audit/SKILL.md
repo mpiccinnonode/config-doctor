@@ -56,9 +56,11 @@ Capture and display the full report from agent-architect before proceeding.
 
 ---
 
-## Phase 2 — Skills Quality Audit (skill-evaluator)
+## Phase 2 — Skills Quality & Efficiency Audit (skill-evaluator + code-quality-scouter)
 
-Use the Agent tool to launch the **skill-evaluator** subagent with the following prompt:
+Use the Agent tool to launch **both** of the following subagents **in parallel** (two Agent tool calls in a single message):
+
+**skill-evaluator:**
 
 ```text
 Audit all skill files for this project. Check both .claude/skills/ and skills/
@@ -75,7 +77,49 @@ Output a structured report:
 Do NOT apply any changes. Report only.
 ```
 
-Capture and display the full skills report before proceeding.
+**code-quality-scouter** (script-offloading analysis):
+
+```text
+Analyze all skill files in this project for script-offloading opportunities.
+Check both .claude/skills/ and skills/ directories (recursively) for skill
+definitions (SKILL.md files).
+
+For each skill, identify work currently done by the LLM that could instead be
+handled by a pre-written script colocated in the skill's folder. Evaluate
+three categories:
+
+1. **Output formatting** — report templates, structured output, markdown
+   assembly that follows a fixed pattern
+2. **Data collection/validation** — multi-command sequences gathering file
+   metadata, config values, or directory structure that could be a single
+   script returning JSON
+3. **Deterministic logic** — YAML validation, version checks, regex matching,
+   duplicate detection, or any rule expressible as a boolean check without
+   LLM reasoning
+
+Output a structured report:
+
+## Script Offloading Analysis
+
+### <skill-name>
+
+| Opportunity | Type | Token Savings | Implementation Effort |
+|---|---|---|---|
+| <description> | <Output formatting / Data collection / Deterministic logic> | <estimated tokens saved per run> | <Low / Medium / High> |
+
+#### Details
+[Brief description of each opportunity: what the script would do, what
+inputs it needs, what it returns]
+
+### Summary
+[Total estimated token savings across all skills, top 3 highest-impact
+opportunities]
+
+If no offloading opportunities are found for a skill, state that explicitly.
+Do NOT apply any changes. Report only.
+```
+
+Capture and display both reports (skill-evaluator and scouter) before proceeding.
 
 ---
 
@@ -135,7 +179,7 @@ Capture and display the memory audit before proceeding.
 
 ## Phase 5 — Consolidated Findings
 
-Synthesize all four reports into a single **Config Doctor Summary**:
+Synthesize all phase reports into a single **Config Doctor Summary**:
 
 ```text
 ## Config Doctor Summary
@@ -154,6 +198,9 @@ Synthesize all four reports into a single **Config Doctor Summary**:
 
 ### Memory Savings
 [Projected token reduction if memory optimizations are applied. Include token savings from skill prompt compression.]
+
+### Script Offloading Opportunities
+[Top opportunities from the scouter's analysis, ordered by estimated token savings. For each: skill name, opportunity description, category, estimated savings, effort level.]
 
 ### Risk Assessment
 [Changes that require care — could affect agent behavior in ways that need verification]
@@ -178,6 +225,7 @@ Present the user with three options:
 **C) Apply all recommendations** — Apply all findings including structural changes, agent rewrites, and rule file reorganization. Requires explicit user confirmation before each significant change.
 
 - Rewrite skills scoring below 35/50 using skill-evaluator's suggested revisions
+- Present script-offloading recommendations for acknowledgment (not auto-implemented — writing scripts is outside audit enforcement scope)
 
 Ask the user which option they want before proceeding. Default to A if no response.
 
@@ -213,7 +261,7 @@ If arguments were passed when invoking this skill (`$ARGUMENTS`), interpret them
 | Phase name | Phase |
 | --- | --- |
 | `agents` | Phase 1 — Agent & Rules Quality Audit |
-| `skills` | Phase 2 — Skills Quality Audit |
+| `skills` | Phase 2 — Skills Quality & Efficiency Audit |
 | `tooling` | Phase 3 — Tooling Gap Analysis |
 | `memory` | Phase 4 — Memory Optimization |
 

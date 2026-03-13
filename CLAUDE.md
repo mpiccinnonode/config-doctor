@@ -16,7 +16,7 @@ agents/              # Bundled subagents — deployed to the user's .claude/agen
   skill-evaluator.md      # Evaluates skill files for quality via a 0-50 rubric (sonnet)
 
 skills/audit/
-  SKILL.md           # The full multi-phase audit orchestration logic (7 phases)
+  SKILL.md           # The full multi-phase audit orchestration logic (7 phases, dual Phase 2 dispatch)
 
 .gitignore           # OS and IDE artifact exclusions
 .markdownlint.yaml   # Markdown lint rules for CI validation
