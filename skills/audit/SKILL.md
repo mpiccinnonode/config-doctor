@@ -3,22 +3,19 @@ name: audit
 version: "1.0.1"
 description: Deep-scan a project's Claude configuration (.claude/ directory, CLAUDE.md, agents, rules, skills, memory files). Produces a quality report, tooling gap analysis, and memory optimization recommendations — then optionally enforces significant changes.
 argument-hint: "[--report-only | --apply-safe | --apply-all] [--phase=agents,skills,...] [--skip-agents] [--skip-skills] [--skip-tooling] [--skip-memory] [/path/to/project]"
-allowed-tools: [Read, Glob, Grep, Write, Edit, Bash, Agent, "mcp__plugin_config-doctor_serena__*"]
+allowed-tools: [Read, Glob, Grep, Write, Edit, Bash, Agent]
 ---
 
 You are orchestrating a multiphase Claude configuration audit. Work through the phases below in order. Be explicit about what you are doing at each step so the user can follow along and intervene if needed.
 
 ---
 
-## Preflight — Serena Availability Check
+## Preflight — Serena Availability Suggestion
 
-Run `uv --version` via Bash. If found, proceed silently to Phase 0.
+Check whether Serena MCP tools are available to the current session (look for any tool matching `mcp__serena__*` or `mcp__plugin_*_serena__*`).
 
-If not found, prompt the user:
-> "Serena MCP is not installed. It reduces token usage by ~60% through semantic code tools. May I install `uv` to enable it?"
-
-- **Approved:** detect OS via `uname -s 2>/dev/null || echo "Windows_NT"`. Run `scripts/install-uv.sh` (Unix/macOS/MINGW) or `scripts/install-uv.ps1` (Windows) via Bash. Verify with `uv --version`, then proceed.
-- **Declined or install failed:** proceed with native tools (`Read`, `Glob`, `Grep`) and note Serena's absence in the Phase 5 summary.
+- **If available:** note this in Phase 0 output. Subagents will automatically prefer Serena tools for lower token usage.
+- **If not available:** proceed with native tools (`Read`, `Glob`, `Grep`). Include a brief note in the Phase 5 summary: "Consider adding [Serena](https://github.com/oraios/serena) as an MCP server — it can reduce token usage during code exploration through semantic tools like `get_symbols_overview` and `search_for_pattern`."
 
 ---
 
@@ -59,9 +56,11 @@ Capture and display the full report from agent-architect before proceeding.
 
 ---
 
-## Phase 2 — Skills Quality Audit (skill-evaluator)
+## Phase 2 — Skills Quality & Efficiency Audit (skill-evaluator + code-quality-scouter)
 
-Use the Agent tool to launch the **skill-evaluator** subagent with the following prompt:
+Use the Agent tool to launch **both** of the following subagents **in parallel** (two Agent tool calls in a single message):
+
+**skill-evaluator:**
 
 ```text
 Audit all skill files for this project. Check both .claude/skills/ and skills/
@@ -78,7 +77,49 @@ Output a structured report:
 Do NOT apply any changes. Report only.
 ```
 
-Capture and display the full skills report before proceeding.
+**code-quality-scouter** (script-offloading analysis):
+
+```text
+Analyze all skill files in this project for script-offloading opportunities.
+Check both .claude/skills/ and skills/ directories (recursively) for skill
+definitions (SKILL.md files).
+
+For each skill, identify work currently done by the LLM that could instead be
+handled by a pre-written script colocated in the skill's folder. Evaluate
+three categories:
+
+1. **Output formatting** — report templates, structured output, markdown
+   assembly that follows a fixed pattern
+2. **Data collection/validation** — multi-command sequences gathering file
+   metadata, config values, or directory structure that could be a single
+   script returning JSON
+3. **Deterministic logic** — YAML validation, version checks, regex matching,
+   duplicate detection, or any rule expressible as a boolean check without
+   LLM reasoning
+
+Output a structured report:
+
+## Script Offloading Analysis
+
+### <skill-name>
+
+| Opportunity | Type | Token Savings | Implementation Effort |
+|---|---|---|---|
+| <description> | <Output formatting / Data collection / Deterministic logic> | <estimated tokens saved per run> | <Low / Medium / High> |
+
+#### Details
+[Brief description of each opportunity: what the script would do, what
+inputs it needs, what it returns]
+
+### Summary
+[Total estimated token savings across all skills, top 3 highest-impact
+opportunities]
+
+If no offloading opportunities are found for a skill, state that explicitly.
+Do NOT apply any changes. Report only.
+```
+
+Capture and display both reports (skill-evaluator and scouter) before proceeding.
 
 ---
 
