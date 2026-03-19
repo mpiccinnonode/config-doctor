@@ -1,84 +1,19 @@
-# config-doctor
+# config-doctor (Archived)
 
-A Claude Code plugin that deep-scans and audits a project's Claude configuration — agents, rules, skills, and memory files — then produces a quality report, tooling gap analysis, and memory optimization recommendations.
+> **This repository has been archived.** config-doctor has moved to the [claude-salad](https://github.com/mpiccinnonode/claude-salad) multi-plugin marketplace.
 
-## What it does
+## New location
 
-Runs a five-phase audit:
+- **Marketplace:** [github.com/mpiccinnonode/claude-salad](https://github.com/mpiccinnonode/claude-salad)
+- **Plugin:** [github.com/mpiccinnonode/claude-salad/tree/main/plugins/config-doctor](https://github.com/mpiccinnonode/claude-salad/tree/main/plugins/config-doctor)
 
-1. **Orientation** — inventories all `.claude/` configuration files
-2. **Agent & Rules Quality Audit** — evaluates every agent against a rubric (0–50), flags rule contradictions, duplicates, and gaps
-3. **Tooling Gap Analysis** — identifies missing linters, MCP servers, and LSP integrations for the project's tech stack
-4. **Memory Optimization** — finds redundant, verbose, and dead rules; projects token savings
-5. **Enforcement** — optionally applies safe fixes automatically or all recommendations with confirmation
-
-## Bundled agents
-
-The plugin ships three agents used internally by the audit:
-
-| Agent | Purpose |
-| ------- | --------- |
-| `agent-architect` | Evaluates agent and rules quality using a structured rubric |
-| `code-quality-scouter` | Audits developer tooling and recommends MCP/LSP additions |
-| `memory-optimizer` | Audits memory files for token waste and redundancy |
-
-The `memory-optimizer` is only used if the project does not already have a custom one in `.claude/agents/`. If a project-level `memory-optimizer` exists, it takes priority.
-
-## Usage
-
-### Via slash command
-
-```text
-/audit
-/audit --report-only
-/audit --apply-safe
-/audit --apply-all
-/audit --skip-tooling
-/audit --skip-memory
-/audit /path/to/other/project
-```
-
-### Via natural language (skill auto-trigger)
-
-Ask Claude to run the config doctor, audit your Claude configuration, or check your `.claude/` setup.
-
-## Optional: Serena MCP for reduced token usage
-
-config-doctor works out of the box with native Claude Code tools. For ~60% lower token usage during audits, add [Serena](https://github.com/oraios/serena) to your Claude Code MCP configuration. config-doctor detects Serena automatically when available — no extra setup needed.
-
-## Installation
-
-### 0. Start Claude Code
+## Installation (new)
 
 ```bash
 claude
 ```
 
-### 1. Add the marketplace
-
-In Claude chat:
-
 ```text
-/plugin marketplace add mpiccinnonode/config-doctor
-```
-
-### 2. Install the plugin
-
-In Claude chat:
-
-```text
+/plugin marketplace add mpiccinnonode/claude-salad
 /plugin install config-doctor
 ```
-
-**3. Restart Claude Code** — the plugin will be active immediately.
-
-## Arguments reference
-
-| Flag | Effect |
-| ------ | -------- |
-| `--report-only` | Phases 1–4 only; no changes applied |
-| `--apply-safe` | Auto-applies unambiguously safe fixes |
-| `--apply-all` | Applies all recommendations (confirms each significant change) |
-| `--skip-tooling` | Skips Phase 2 (tooling gap analysis) |
-| `--skip-memory` | Skips Phase 3 (memory optimization) |
-| `/path/to/project` | Targets a specific directory instead of cwd |
